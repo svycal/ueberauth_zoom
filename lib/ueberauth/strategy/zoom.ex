@@ -20,7 +20,7 @@ defmodule Ueberauth.Strategy.Zoom do
       |> put_state_option(conn)
 
     module = option(conn, :oauth2_module)
-    redirect!(conn, apply(module, :authorize_url!, [opts]))
+    redirect!(conn, apply(module, :authorize_url!, [[], opts]))
   end
 
   defp put_state_option(opts, %{params: %{"state" => state}}) do

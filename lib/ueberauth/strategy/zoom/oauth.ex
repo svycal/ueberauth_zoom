@@ -10,6 +10,10 @@ defmodule Ueberauth.Strategy.Zoom.OAuth do
   """
   use OAuth2.Strategy
 
+  alias Ueberauth.Strategy.Zoom.OAuthStrategy
+
+  @behaviour OAuthStrategy
+
   @defaults [
     strategy: __MODULE__,
     site: "https://api.zoom.us",
@@ -26,6 +30,7 @@ defmodule Ueberauth.Strategy.Zoom.OAuth do
 
   These options are only useful for usage outside the normal callback phase of Ueberauth.
   """
+  @impl OAuthStrategy
   def client(opts \\ []) do
     config = Application.get_env(:ueberauth, __MODULE__, [])
     opts = @defaults |> Keyword.merge(opts) |> Keyword.merge(config)
@@ -39,6 +44,7 @@ defmodule Ueberauth.Strategy.Zoom.OAuth do
   @doc """
   Provides the authorize url for the request phase of Ueberauth. No need to call this usually.
   """
+  @impl OAuthStrategy
   def authorize_url!(params \\ [], opts \\ []) do
     opts
     |> client
@@ -48,6 +54,7 @@ defmodule Ueberauth.Strategy.Zoom.OAuth do
   @doc """
   Fetches a token.
   """
+  @impl OAuthStrategy
   def get_token(params \\ [], opts \\ []) do
     OAuth2.Client.get_token(client(opts), params)
   end
@@ -55,6 +62,7 @@ defmodule Ueberauth.Strategy.Zoom.OAuth do
   @doc """
   Makes a GET request to the given URL.
   """
+  @impl OAuthStrategy
   def get(token, url, headers \\ [], opts \\ []) do
     [token: token]
     |> client()
@@ -63,10 +71,12 @@ defmodule Ueberauth.Strategy.Zoom.OAuth do
 
   # Strategy Callbacks
 
+  @impl OAuth2.Strategy
   def authorize_url(client, params) do
     OAuth2.Strategy.AuthCode.authorize_url(client, params)
   end
 
+  @impl OAuth2.Strategy
   def get_token(client, params, headers) do
     client
     |> put_header("accept", "application/json")
