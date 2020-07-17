@@ -140,7 +140,9 @@ defmodule Ueberauth.Strategy.Zoom do
     set_errors!(conn, [error("token", "unauthorized")])
   end
 
-  defp handle_failure(conn, {:error, %OAuth2.Response{status_code: status_code}}) do
+  defp handle_failure(conn, {:error, %OAuth2.Response{status_code: status_code} = resp}) do
+    IO.inspect(conn)
+    IO.inspect(resp)
     set_errors!(conn, [error("OAuth2", status_code)])
   end
 
