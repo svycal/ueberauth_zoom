@@ -1,13 +1,22 @@
 defmodule UeberauthZoom.MixProject do
   use Mix.Project
 
+  @version "0.1.0"
+  @url "https://github.com/mightycal/ueberauth_zoom"
+
   def project do
     [
       app: :ueberauth_zoom,
-      version: "0.1.0",
+      version: @version,
+      name: "Ueberauth Zoom Strategy",
+      package: package(),
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      source_url: @url,
+      homepage_url: @url,
+      description: description(),
+      deps: deps(),
+      docs: docs()
     ]
   end
 
@@ -25,6 +34,23 @@ defmodule UeberauthZoom.MixProject do
       {:ueberauth, "~> 0.6.0"},
       {:credo, "~> 1.4", only: [:dev, :test], runtime: false},
       {:ex_doc, ">= 0.0.0", only: [:dev], runtime: false}
+    ]
+  end
+
+  defp docs do
+    [extras: ["README.md"]]
+  end
+
+  defp description do
+    "An Überauth strategy for Zoom authentication."
+  end
+
+  defp package do
+    [
+      files: ["lib", "mix.exs", "README.md", "LICENSE"],
+      maintainers: ["Derrick Reimer"],
+      licenses: ["MIT"],
+      links: %{GitHub: @url}
     ]
   end
 end
