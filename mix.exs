@@ -2,7 +2,7 @@ defmodule UeberauthZoom.MixProject do
   use Mix.Project
 
   @version "0.1.0"
-  @url "https://github.com/mightycal/ueberauth_zoom"
+  @url "https://github.com/svycal/ueberauth_zoom"
 
   def project do
     [
