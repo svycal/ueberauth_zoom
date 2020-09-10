@@ -80,7 +80,7 @@ For an example implementation see the [Überauth Example](https://github.com/ueb
 
 Depending on the configured url you can initiate the request through:
 
-    /auth/google
+    /auth/zoom
     
 ## License
 
