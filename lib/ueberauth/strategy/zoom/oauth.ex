@@ -33,7 +33,7 @@ defmodule Ueberauth.Strategy.Zoom.OAuth do
   @impl OAuthStrategy
   def client(opts \\ []) do
     config = Application.get_env(:ueberauth, __MODULE__, [])
-    opts = @defaults |> Keyword.merge(opts) |> Keyword.merge(config)
+    opts = @defaults |> Keyword.merge(opts) |> Keyword.merge(config) |> resolve_values()
     json_library = Ueberauth.json_library()
 
     opts
@@ -82,4 +82,13 @@ defmodule Ueberauth.Strategy.Zoom.OAuth do
     |> put_header("accept", "application/json")
     |> OAuth2.Strategy.AuthCode.get_token(params, headers)
   end
+
+  defp resolve_values(list) do
+    for {key, value} <- list do
+      {key, resolve_value(value)}
+    end
+  end
+
+  defp resolve_value({m, f, a}) when is_atom(m) and is_atom(f), do: apply(m, f, a)
+  defp resolve_value(v), do: v
 end
