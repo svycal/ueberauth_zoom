@@ -42,5 +42,27 @@ defmodule Ueberauth.Strategy.ZoomTest do
                status: 302
              } = conn
     end
+
+    test "passes the state value as a param if specified" do
+      authorize_url = "https://zoomapi.test"
+      optional_state = %{"state" => "state-value"}
+
+      expect(OAuthMock, :authorize_url!, fn params, opts ->
+        assert params == []
+
+        assert opts == [
+                 {:params, optional_state},
+                 {:redirect_uri, "http://www.example.com/auth/zoom/callback"}
+               ]
+
+        authorize_url
+      end)
+
+      conn =
+        conn(:get, "/", %{state: "state-value"})
+        |> Ueberauth.run_request(:zoom, @provider_config)
+
+      assert %Plug.Conn{params: ^optional_state} = conn
+    end
   end
 end
