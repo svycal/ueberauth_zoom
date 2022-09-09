@@ -11,8 +11,8 @@ defmodule Ueberauth.Strategy.ZoomTest do
       authorize_url = "https://zoomapi.test"
 
       expect(OAuthMock, :authorize_url!, fn params, opts ->
-        assert params == []
-        assert opts == [{:redirect_uri, "http://www.example.com/auth/zoom/callback"}]
+        assert is_binary(Keyword.get(params, :state))
+        assert Keyword.get(opts, :redirect_uri) == "http://www.example.com/auth/zoom/callback"
         authorize_url
       end)
 
@@ -20,48 +20,8 @@ defmodule Ueberauth.Strategy.ZoomTest do
         conn(:get, "/", %{})
         |> Ueberauth.run_request(:zoom, provider_config())
 
-      assert %Plug.Conn{
-               private: %{
-                 ueberauth_request_options: %{
-                   callback_methods: ["GET"],
-                   callback_path: "/auth/zoom/callback",
-                   request_path: "/auth/zoom",
-                   strategy: Ueberauth.Strategy.Zoom,
-                   strategy_name: :zoom
-                 }
-               },
-               resp_headers: [
-                 {"cache-control", "max-age=0, private, must-revalidate"},
-                 {"location", ^authorize_url}
-               ],
-               scheme: :http,
-               script_name: [],
-               secret_key_base: nil,
-               state: :sent,
-               status: 302
-             } = conn
-    end
-
-    test "passes the state value as a param if specified" do
-      authorize_url = "https://zoomapi.test"
-      optional_state = %{"state" => "state-value"}
-
-      expect(OAuthMock, :authorize_url!, fn params, opts ->
-        assert params == []
-
-        assert opts == [
-                 {:params, optional_state},
-                 {:redirect_uri, "http://www.example.com/auth/zoom/callback"}
-               ]
-
-        authorize_url
-      end)
-
-      conn =
-        conn(:get, "/", %{state: "state-value"})
-        |> Ueberauth.run_request(:zoom, @provider_config)
-
-      assert %Plug.Conn{params: ^optional_state} = conn
+      assert conn.status == 302
+      assert [^authorize_url] = get_resp_header(conn, "location")
     end
   end
 
