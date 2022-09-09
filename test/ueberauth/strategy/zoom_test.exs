@@ -1,11 +1,10 @@
 defmodule Ueberauth.Strategy.ZoomTest do
+  @moduledoc false
   use ExUnit.Case, async: true
 
   use Plug.Test
 
   import Mox
-
-  @provider_config Keyword.get(Application.get_env(:ueberauth, Ueberauth)[:providers], :zoom)
 
   describe "handle_request!/1" do
     test "passes the correct data to the OAuth request" do
@@ -19,7 +18,7 @@ defmodule Ueberauth.Strategy.ZoomTest do
 
       conn =
         conn(:get, "/", %{})
-        |> Ueberauth.run_request(:zoom, @provider_config)
+        |> Ueberauth.run_request(:zoom, provider_config())
 
       assert %Plug.Conn{
                private: %{
@@ -42,5 +41,9 @@ defmodule Ueberauth.Strategy.ZoomTest do
                status: 302
              } = conn
     end
+  end
+
+  defp provider_config do
+    Keyword.get(Application.get_env(:ueberauth, Ueberauth)[:providers], :zoom)
   end
 end

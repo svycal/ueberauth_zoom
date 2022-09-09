@@ -8,15 +8,16 @@ defmodule UeberauthZoom.MixProject do
     [
       app: :ueberauth_zoom,
       version: @version,
-      name: "Ueberauth Zoom Strategy",
-      package: package(),
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
+      elixirc_paths: elixirc_paths(Mix.env()),
+      name: "Ueberauth Zoom Strategy",
       source_url: @url,
       homepage_url: @url,
+      docs: docs(),
       description: description(),
       deps: deps(),
-      docs: docs()
+      package: package()
     ]
   end
 
@@ -32,14 +33,26 @@ defmodule UeberauthZoom.MixProject do
     [
       {:oauth2, "~> 1.0 or ~> 2.0"},
       {:ueberauth, "~> 0.6.0"},
-      {:credo, "~> 1.4", only: [:dev, :test], runtime: false},
-      {:ex_doc, ">= 0.0.0", only: [:dev], runtime: false},
+      {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false},
+      {:ex_doc, "~> 0.27", only: :dev, runtime: false},
       {:mox, "~> 0.5", only: :test}
     ]
   end
 
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(_), do: ["lib"]
+
   defp docs do
-    [extras: ["README.md"]]
+    [
+      source_ref: "v#{@version}",
+      main: "readme",
+      extras: [
+        "README.md",
+        "CHANGELOG.md",
+        "LICENSE.md"
+      ]
+    ]
   end
 
   defp description do
@@ -48,10 +61,17 @@ defmodule UeberauthZoom.MixProject do
 
   defp package do
     [
-      files: ["lib", "mix.exs", "README.md", "LICENSE"],
       maintainers: ["Derrick Reimer"],
       licenses: ["MIT"],
-      links: %{GitHub: @url}
+      links: links()
     ]
+  end
+
+  def links do
+    %{
+      "GitHub" => @url,
+      "Changelog" => "#{@url}/blob/v#{@version}/CHANGELOG.md",
+      "Readme" => "#{@url}/blob/v#{@version}/README.md"
+    }
   end
 end
