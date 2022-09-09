@@ -10,7 +10,7 @@
 
     ```elixir
     def deps do
-      [{:ueberauth_zoom, "~> 0.1"}]
+      [{:ueberauth_zoom, "~> 0.2.0"}]
     end
     ```
 
