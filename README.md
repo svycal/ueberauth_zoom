@@ -84,4 +84,4 @@ Depending on the configured url you can initiate the request through:
     
 ## License
 
-Please see [LICENSE](https://github.com/svycal/ueberauth_zoom/blob/master/LICENSE) for licensing details.
+Please see [LICENSE](https://github.com/svycal/ueberauth_zoom/blob/main/LICENSE.md) for licensing details.
