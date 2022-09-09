@@ -24,7 +24,7 @@ defmodule Ueberauth.Strategy.Zoom do
   end
 
   defp put_state_option(opts, %{params: %{"state" => state}}) do
-    Keyword.put(opts, :state, state)
+    Keyword.put(opts, :params, %{"state" => state})
   end
 
   defp put_state_option(opts, _), do: opts
